@@ -1,0 +1,29 @@
+version: '3'
+services:
+  web:
+    container_name: web
+    volumes:
+      - ./:/src
+    tty: true
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: go_database
+      MYSQL_USER: go_test
+      MYSQL_PASSWORD: password
+    container_name: db
+    volumes:
+      - data-volume:/var/lib/mysql
+
+volumes:
+  data-volume:
+    driver: local
