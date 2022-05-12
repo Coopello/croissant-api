@@ -2,9 +2,11 @@ version: '3'
 services:
   web:
     container_name: web
+    hostname: localhost
     volumes:
       - ./:/src
     tty: true
+    stdin_open: true
     build:
       context: ./
       dockerfile: Dockerfile
@@ -15,15 +17,29 @@ services:
 
   db:
     image: mysql:8.0
+    container_name: db
     environment:
-      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: go_database
       MYSQL_USER: go_test
       MYSQL_PASSWORD: password
-    container_name: db
+      TZ: 'Asia/Tokyo'
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
-      - data-volume:/var/lib/mysql
+      - ./db/data:/var/lib/mysql
+      - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./db/seed:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
 
-volumes:
-  data-volume:
-    driver: local
+  # phpMyAdmin
+  phpmyadmin:
+    container_name: test_phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    environment:
+    - PMA_ARBITRARY=1
+    - PMA_HOSTS=db
+    - PMA_USER=root
+    - PMA_PASSWORD=root
+    ports:
+    - 8080:80
