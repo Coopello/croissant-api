@@ -2,7 +2,6 @@ package database
 
 import (
 	"CoopeLunch-api/domain"
-	"fmt"
 )
 
 type PlanRepository struct {
@@ -33,7 +32,6 @@ func (repo *PlanRepository) All() (plans []domain.TPlan, err error) {
 }
 
 func (repo *PlanRepository) Insert(plan domain.TPlanInsert) (id int, err error) {
-	fmt.Println("repo Insert", plan)
 	exe, err := repo.Execute(
 		"INSERT INTO plan(ShopName, MeetPlace, MaxPeopleNumber, MinPeopleNumber, MeetTime, OwnerUserId) VALUES(?, ?, ?, ?, ?, ?)",
 		plan.ShopName, plan.MeetPlace, plan.MaxPeopleNumber, plan.MinPeopleNumber, plan.MeetTime, plan.OwnerUserId,
