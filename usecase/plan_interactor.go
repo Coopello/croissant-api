@@ -1,6 +1,8 @@
 package usecase
 
-import "CoopeLunch-api/domain"
+import (
+	"CoopeLunch-api/domain"
+)
 
 type PlanInteractor struct {
 	repository PlanRepository
@@ -14,9 +16,15 @@ func NewPlanInteractor(plan PlanRepository) domain.PlanInteractor {
 
 type PlanRepository interface {
 	All() ([]domain.TPlan, error)
+	Insert(domain.TPlanInsert) (int, error)
 }
 
 func (interactor *PlanInteractor) ListPlan() (plans []domain.TPlan, err error) {
 	plans, err = interactor.repository.All()
+	return
+}
+
+func (interactor *PlanInteractor) InsertPlan(plan domain.TPlanInsert) (id int, err error) {
+	id, err = interactor.repository.Insert(plan)
 	return
 }

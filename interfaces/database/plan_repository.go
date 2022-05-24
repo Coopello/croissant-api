@@ -1,6 +1,8 @@
 package database
 
-import "CoopeLunch-api/domain"
+import (
+	"CoopeLunch-api/domain"
+)
 
 type PlanRepository struct {
 	SqlHandler
@@ -26,5 +28,22 @@ func (repo *PlanRepository) All() (plans []domain.TPlan, err error) {
 		}
 		plans = append(plans, p)
 	}
+	return
+}
+
+func (repo *PlanRepository) Insert(plan domain.TPlanInsert) (id int, err error) {
+	exe, err := repo.Execute(
+		"INSERT INTO plan(ShopName, MeetPlace, MaxPeopleNumber, MinPeopleNumber, MeetTime, OwnerUserId) VALUES(?, ?, ?, ?, ?, ?)",
+		plan.ShopName, plan.MeetPlace, plan.MaxPeopleNumber, plan.MinPeopleNumber, plan.MeetTime, plan.OwnerUserId,
+	)
+	if err != nil {
+		return id, err
+	}
+
+	rawId, err := exe.LastInsertId()
+	if err != nil {
+		return id, err
+	}
+	id = int(rawId)
 	return
 }
