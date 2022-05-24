@@ -4,6 +4,7 @@ import (
 	"CoopeLunch-api/domain"
 	"CoopeLunch-api/interfaces/database"
 	"CoopeLunch-api/usecase"
+	"encoding/json"
 	"net/http"
 )
 
@@ -24,5 +25,21 @@ func NewPlanController(sqlHandler database.SqlHandler) *PlanController {
 func (controller *PlanController) PlanListView(w http.ResponseWriter, r *http.Request) {
 	plans, err := controller.interactor.ListPlan()
 	response(w, err, map[string]interface{}{"data": plans})
+	return
+}
+
+func (controller *PlanController) PlanInsertView(w http.ResponseWriter, r *http.Request) {
+	var plan domain.TPlanInsert
+	err := json.NewDecoder(r.Body).Decode(&plan)
+	if err != nil {
+		response(w, err, nil)
+		return
+	}
+	id, err := controller.interactor.InsertPlan(plan)
+	if err != nil {
+		response(w, err, nil)
+		return
+	}
+	response(w, nil, map[string]interface{}{"data": id})
 	return
 }
