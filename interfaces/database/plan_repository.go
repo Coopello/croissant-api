@@ -10,7 +10,7 @@ type PlanRepository struct {
 
 func (repo *PlanRepository) All() (plans []domain.TPlan, err error) {
 	rows, err := repo.Query(
-		"SELECT * FROM plan",
+		"SELECT * FROM plans",
 	)
 	if err != nil {
 		panic(err.Error())
@@ -28,12 +28,13 @@ func (repo *PlanRepository) All() (plans []domain.TPlan, err error) {
 		}
 		plans = append(plans, p)
 	}
+
 	return
 }
 
 func (repo *PlanRepository) Insert(plan domain.TPlanInsert) (id int, err error) {
 	exe, err := repo.Execute(
-		"INSERT INTO plan(ShopName, MeetPlace, MaxPeopleNumber, MinPeopleNumber, MeetTime, OwnerUserId) VALUES(?, ?, ?, ?, ?, ?)",
+		"INSERT INTO plans(ShopName, MeetPlace, MaxPeopleNumber, MinPeopleNumber, MeetTime, OwnerUserId) VALUES(?, ?, ?, ?, ?, ?)",
 		plan.ShopName, plan.MeetPlace, plan.MaxPeopleNumber, plan.MinPeopleNumber, plan.MeetTime, plan.OwnerUserId,
 	)
 	if err != nil {
