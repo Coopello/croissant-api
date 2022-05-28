@@ -24,6 +24,10 @@ func NewPlanController(sqlHandler database.SqlHandler) *PlanController {
 
 func (controller *PlanController) PlanListView(w http.ResponseWriter, r *http.Request) {
 	plans, err := controller.interactor.ListPlan()
+	// 配列が空の場合にnullではなく、空の配列がレスポンスになるように
+	if len(plans) == 0 {
+		plans = make([]domain.TPlan, 0)
+	}
 	response(w, err, map[string]interface{}{"data": plans})
 	return
 }
