@@ -14,6 +14,7 @@ func main() {
 	// Plan
 	planController := controllers.NewPlanController(sqlHandler)
 	router.Handle("/plan/", http.HandlerFunc(planController.PlanListView))
+	router.Handle("/plan/users/", http.HandlerFunc(planController.PlanListByUserIdView))
 	router.Handle("/plan/create/", http.HandlerFunc(planController.PlanInsertView))
 
 	srv := http.Server{
