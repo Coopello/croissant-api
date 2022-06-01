@@ -16,11 +16,17 @@ func NewPlanInteractor(plan PlanRepository) domain.PlanInteractor {
 
 type PlanRepository interface {
 	All() ([]domain.TPlan, error)
+	GetByUserId(userId int) ([]domain.TPlan, error)
 	Insert(domain.TPlanInsert) (int, error)
 }
 
 func (interactor *PlanInteractor) ListPlan() (plans []domain.TPlan, err error) {
 	plans, err = interactor.repository.All()
+	return
+}
+
+func (interactor *PlanInteractor) ListPlanByUserId(userId int) (plans []domain.TPlan, err error) {
+	plans, err = interactor.repository.GetByUserId(userId)
 	return
 }
 
