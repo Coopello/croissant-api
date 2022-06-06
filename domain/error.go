@@ -10,4 +10,6 @@ var (
 	ErrBadRequest          = errors.New("Bad Request")
 	StatusCreated          = errors.New("Created")
 	ErrUnknownType         = errors.New("Unknown Type")
+	ErrExistingEmail       = errors.New("Existing Email")
+	ErrIncorrectPassword   = errors.New("Incorrect Password")
 )
