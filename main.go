@@ -11,6 +11,11 @@ func main() {
 	router := http.NewServeMux()
 	sqlHandler := infrastructure.NewSqlHandler()
 
+	// User
+	userController := controllers.NewUserController(sqlHandler)
+	router.Handle("/signUp", http.HandlerFunc(userController.SighUpView))
+	router.Handle("/login", http.HandlerFunc(userController.LoginUserView))
+
 	// Plan
 	planController := controllers.NewPlanController(sqlHandler)
 	router.Handle("/plan/", http.HandlerFunc(planController.PlanListView))
