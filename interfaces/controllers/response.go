@@ -9,10 +9,8 @@ import (
 func response(w http.ResponseWriter, err error, body map[string]interface{}) error {
 	status := getStatusCode(err)
 	w.WriteHeader(status)
-	if status == http.StatusOK {
-		data, _ := json.Marshal(body)
-		w.Write(data)
-	}
+	data, _ := json.Marshal(body)
+	w.Write(data)
 	return err
 }
 
@@ -35,6 +33,10 @@ func getStatusCode(err error) int {
 		return http.StatusCreated
 	case domain.ErrUnknownType:
 		return http.StatusUnsupportedMediaType
+	case domain.ErrExistingEmail:
+		return http.StatusConflict
+	case domain.ErrIncorrectPassword:
+		return http.StatusBadRequest
 	default:
 		return http.StatusInternalServerError
 	}

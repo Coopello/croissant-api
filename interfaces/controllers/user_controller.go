@@ -26,12 +26,12 @@ func (controller *UserController) SighUpView(w http.ResponseWriter, r *http.Requ
 	var user domain.TUserInsert
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
-		response(w, err, nil)
+		response(w, err, map[string]interface{}{"error": err.Error()})
 		return
 	}
 	resUser, err := controller.interactor.SighUp(user)
 	if err != nil {
-		response(w, err, nil)
+		response(w, err, map[string]interface{}{"error": err.Error()})
 		return
 	}
 	response(w, nil, map[string]interface{}{"data": resUser})
@@ -42,12 +42,12 @@ func (controller *UserController) LoginUserView(w http.ResponseWriter, r *http.R
 	var user domain.TLoginUser
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
-		response(w, err, nil)
+		response(w, err, map[string]interface{}{"error": err.Error()})
 		return
 	}
 	resUser, err := controller.interactor.LoginUser(user)
 	if err != nil {
-		response(w, err, nil)
+		response(w, err, map[string]interface{}{"error": err.Error()})
 		return
 	}
 	response(w, nil, map[string]interface{}{"data": resUser})
