@@ -3,6 +3,7 @@ package controllers
 import (
 	"CoopeLunch-api/domain"
 	"CoopeLunch-api/interfaces/database"
+	"CoopeLunch-api/tools"
 	"CoopeLunch-api/usecase"
 	"encoding/json"
 	"net/http"
@@ -54,6 +55,9 @@ func (controller *PlanController) PlanInsertView(w http.ResponseWriter, r *http.
 	if err != nil {
 		response(w, err, nil)
 		return
+	}
+	if plan.MinPeopleNumber == 1 {
+		plan.PlanStatus = tools.PLAN_STATUS["ESTABLISHED"]
 	}
 	id, err := controller.interactor.InsertPlan(plan)
 	if err != nil {
