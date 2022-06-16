@@ -20,6 +20,11 @@ type TPlanInsert struct {
 	OwnerUserId     int    `json:"owner_user_id"`
 }
 
+type TPlanWithParticipantUsers struct {
+	TPlan
+	ParticipantUsers int `json:"participant_users"`
+}
+
 type PlanInteractor interface {
 	ListPlan() ([]TPlan, error)
 	ListPlanByUserId(int) ([]TPlan, error)

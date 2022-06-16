@@ -13,4 +13,5 @@ type TPlanParticipantUsersInsert struct {
 
 type PlanParticipantUsersInteractor interface {
 	InsertPlanParticipantUsers(TPlanParticipantUsersInsert) (int, error)
+	ListPlanParticipantUsersByUserId(int) ([]TPlanWithParticipantUsers, error)
 }
