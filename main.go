@@ -17,6 +17,10 @@ func main() {
 	router.Handle("/plan/users/", http.HandlerFunc(planController.PlanListByUserIdView))
 	router.Handle("/plan/create/", http.HandlerFunc(planController.PlanInsertView))
 
+	// PlanParticipantUsers
+	planParticipantUsersController := controllers.NewPlanParticipantUsersController(sqlHandler)
+	router.Handle("/plan-participant-users/", http.HandlerFunc(planParticipantUsersController.PlanParticipantUsersInsertView))
+
 	srv := http.Server{
 		Addr:    ":8000",
 		Handler: router,
