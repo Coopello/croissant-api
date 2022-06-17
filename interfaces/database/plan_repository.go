@@ -71,5 +71,15 @@ func (repo *PlanRepository) Insert(plan domain.TPlanInsert) (id int, err error) 
 		return id, err
 	}
 	id = int(rawId)
+
+	_, err = repo.Execute(
+		"INSERT INTO plan_participant_users (UserId, PlanId) VALUES(?, ?)",
+		plan.OwnerUserId,
+		id,
+	)
+	if err != nil {
+		return id, err
+	}
+
 	return
 }
