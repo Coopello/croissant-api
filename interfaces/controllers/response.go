@@ -9,10 +9,8 @@ import (
 func response(w http.ResponseWriter, err error, body map[string]interface{}) error {
 	status := getStatusCode(err)
 	w.WriteHeader(status)
-	if status == http.StatusOK {
-		data, _ := json.Marshal(body)
-		w.Write(data)
-	}
+	data, _ := json.Marshal(body)
+	w.Write(data)
 	return err
 }
 

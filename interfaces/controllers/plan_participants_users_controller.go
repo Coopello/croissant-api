@@ -27,12 +27,12 @@ func (controller *PlanParticipantUsersController) PlanParticipantUsersInsertView
 	var planParticipantUsers domain.TPlanParticipantUsersInsert
 	err := json.NewDecoder(r.Body).Decode(&planParticipantUsers)
 	if err != nil {
-		response(w, err, map[string]interface{}{"error": err})
+		response(w, err, map[string]interface{}{"error": err.Error()})
 		return
 	}
 	id, err := controller.interactor.InsertPlanParticipantUsers(planParticipantUsers)
 	if err != nil {
-		response(w, err, map[string]interface{}{"error": err})
+		response(w, err, map[string]interface{}{"error": err.Error()})
 		return
 	}
 	response(w, nil, map[string]interface{}{"id": id})
@@ -42,7 +42,7 @@ func (controller *PlanParticipantUsersController) PlanParticipantUsersInsertView
 func (controller *PlanParticipantUsersController) PlanParticipantUsersListByUserIdView(w http.ResponseWriter, r *http.Request) {
 	userId, err := strconv.Atoi(r.URL.Query().Get("userId"))
 	if err != nil {
-		response(w, err, map[string]interface{}{"error": err})
+		response(w, err, map[string]interface{}{"error": err.Error()})
 		return
 	}
 	planParticipantUsers, err := controller.interactor.ListPlanParticipantUsersByUserId(userId)
@@ -56,7 +56,7 @@ func (controller *PlanParticipantUsersController) PlanParticipantUsersListByUser
 func (controller *PlanParticipantUsersController) PlanParticipantUsersListHistoriesView(w http.ResponseWriter, r *http.Request) {
 	userId, err := strconv.Atoi(r.URL.Query().Get("userId"))
 	if err != nil {
-		response(w, err, map[string]interface{}{"error": err})
+		response(w, err, map[string]interface{}{"error": err.Error()})
 		return
 	}
 	planParticipantUsers, err := controller.interactor.ListPlanHistoriesByUserId(userId)
