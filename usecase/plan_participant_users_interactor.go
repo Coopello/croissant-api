@@ -16,7 +16,8 @@ func NewPlanParticipantUsersInteractor(planParticipantUsers PlanParticipantUsers
 
 type PlanParticipantUsersRepository interface {
 	Insert(domain.TPlanParticipantUsersInsert) (id int, err error)
-	GetByUserId(userId int) ([]domain.TPlanWithParticipantUsers, error)
+	GetByUserId(userId int) ([]domain.TPlan, error)
+	GetHistoriesByUserId(userId int) ([]domain.TPlan, error)
 }
 
 func (interactor *PlanParticipantUsersInteractor) InsertPlanParticipantUsers(planParticipantUsers domain.TPlanParticipantUsersInsert) (id int, err error) {
@@ -24,7 +25,12 @@ func (interactor *PlanParticipantUsersInteractor) InsertPlanParticipantUsers(pla
 	return
 }
 
-func (interactor *PlanParticipantUsersInteractor) ListPlanParticipantUsersByUserId(userId int) (plans []domain.TPlanWithParticipantUsers, err error) {
+func (interactor *PlanParticipantUsersInteractor) ListPlanParticipantUsersByUserId(userId int) (plans []domain.TPlan, err error) {
 	plans, err = interactor.repository.GetByUserId(userId)
+	return
+}
+
+func (interactor *PlanParticipantUsersInteractor) ListPlanHistoriesByUserId(userId int) (plans []domain.TPlan, err error) {
+	plans, err = interactor.repository.GetHistoriesByUserId(userId)
 	return
 }

@@ -7,7 +7,7 @@ type TPlan struct {
 	MaxPeopleNumber       int    `json:"max_people_number"`
 	MinPeopleNumber       int    `json:"min_people_number"`
 	MeetTime              string `json:"meet_time"`
-	PlanStatus            int      `json:"status"`
+	PlanStatus            int    `json:"status"`
 	OwnerUserId           int    `json:"owner_user_id"`
 	ParticipantUsersCount int    `json:"participant_users_count"`
 }
@@ -19,11 +19,6 @@ type TPlanInsert struct {
 	MinPeopleNumber int    `json:"min_people_number"`
 	MeetTime        string `json:"meet_time"`
 	OwnerUserId     int    `json:"owner_user_id"`
-}
-
-type TPlanWithParticipantUsers struct {
-	TPlan
-	ParticipantUsers int `json:"participant_users"`
 }
 
 type PlanInteractor interface {

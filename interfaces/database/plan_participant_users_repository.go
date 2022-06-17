@@ -24,53 +24,46 @@ func (repo *PlanParticipantUsersRepository) Insert(planParticipantUsers domain.T
 	return
 }
 
-func (repo *PlanParticipantUsersRepository) GetByUserId(userId int) (plans []domain.TPlanWithParticipantUsers, err error) {
+func (repo *PlanParticipantUsersRepository) GetByUserId(userId int) (plans []domain.TPlan, err error) {
 	rows, err := repo.Query(
-		"SELECT PlanId FROM plan_participant_users WHERE UserId = ?",
+		"SELECT PlanId as ID, ShopName, MeetPlace, MaxPeopleNumber, MinPeopleNumber, MeetTime, PlanStatus, OwnerUserId, ParticipantUsersCount FROM plans INNER JOIN plan_participant_users ON plans.ID = plan_participant_users.PlanId WHERE plan_participant_users.UserId = ? AND plans.PlanStatus <= 2",
 		userId,
 	)
 	if err != nil {
 		panic(err.Error())
 	}
-	var planId int
 	defer rows.Close()
 	for rows.Next() {
-		err := rows.Scan(&planId)
+		var p domain.TPlan
+		err := rows.Scan(
+			&p.ID, &p.ShopName, &p.MeetPlace, &p.MaxPeopleNumber, &p.MinPeopleNumber, &p.MeetTime, &p.PlanStatus, &p.OwnerUserId, &p.ParticipantUsersCount,
+		)
 		if err != nil {
 			panic(err.Error())
 		}
+		plans = append(plans, p)
 	}
 
-	rows, err = repo.Query(
-		"SELECT COUNT(*) FROM plan_participant_users WHERE PlanId = ?",
-		planId,
-	)
-	var participantUsers int
-	defer rows.Close()
-	for rows.Next() {
-		err := rows.Scan(&participantUsers)
-		if err != nil {
-			panic(err.Error())
-		}
-	}
+	return
+}
 
-	rows, err = repo.Query(
-		"SELECT * FROM plans WHERE ID = ? AND PlanStatus <= 2",
-		planId,
+func (repo *PlanParticipantUsersRepository) GetHistoriesByUserId(userId int) (plans []domain.TPlan, err error) {
+	rows, err := repo.Query(
+		"SELECT PlanId as ID, ShopName, MeetPlace, MaxPeopleNumber, MinPeopleNumber, MeetTime, PlanStatus, OwnerUserId, ParticipantUsersCount FROM plans INNER JOIN plan_participant_users ON plans.ID = plan_participant_users.PlanId WHERE plan_participant_users.UserId = ? AND plans.PlanStatus = 3",
+		userId,
 	)
 	if err != nil {
 		panic(err.Error())
 	}
 	defer rows.Close()
 	for rows.Next() {
-		var p domain.TPlanWithParticipantUsers
+		var p domain.TPlan
 		err := rows.Scan(
-			&p.ID, &p.ShopName, &p.MeetPlace, &p.MaxPeopleNumber, &p.MinPeopleNumber, &p.MeetTime, &p.PlanStatus, &p.OwnerUserId,
+			&p.ID, &p.ShopName, &p.MeetPlace, &p.MaxPeopleNumber, &p.MinPeopleNumber, &p.MeetTime, &p.PlanStatus, &p.OwnerUserId, &p.ParticipantUsersCount,
 		)
 		if err != nil {
 			panic(err.Error())
 		}
-		p.ParticipantUsers = participantUsers
 		plans = append(plans, p)
 	}
 

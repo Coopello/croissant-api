@@ -5,7 +5,6 @@ import (
 	"CoopeLunch-api/interfaces/database"
 	"CoopeLunch-api/usecase"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 )
@@ -27,7 +26,6 @@ func NewPlanParticipantUsersController(sqlHandler database.SqlHandler) *PlanPart
 func (controller *PlanParticipantUsersController) PlanParticipantUsersInsertView(w http.ResponseWriter, r *http.Request) {
 	var planParticipantUsers domain.TPlanParticipantUsersInsert
 	err := json.NewDecoder(r.Body).Decode(&planParticipantUsers)
-	fmt.Println(planParticipantUsers)
 	if err != nil {
 		response(w, err, map[string]interface{}{"error": err})
 		return
@@ -49,7 +47,22 @@ func (controller *PlanParticipantUsersController) PlanParticipantUsersListByUser
 	}
 	planParticipantUsers, err := controller.interactor.ListPlanParticipantUsersByUserId(userId)
 	if len(planParticipantUsers) == 0 {
-		planParticipantUsers = make([]domain.TPlanWithParticipantUsers, 0)
+		planParticipantUsers = make([]domain.TPlan, 0)
+	}
+	response(w, err, map[string]interface{}{"data": planParticipantUsers})
+	return
+}
+
+func (controller *PlanParticipantUsersController) PlanParticipantUsersListHistoriesView(w http.ResponseWriter, r *http.Request) {
+	userId, err := strconv.Atoi(r.URL.Query().Get("userId"))
+	if err != nil {
+		response(w, err, map[string]interface{}{"error": err})
+		return
+	}
+	planParticipantUsers, err := controller.interactor.ListPlanHistoriesByUserId(userId)
+	// 配列が空の場合にnullではなく、空の配列がレスポンスになるように
+	if len(planParticipantUsers) == 0 {
+		planParticipantUsers = make([]domain.TPlan, 0)
 	}
 	response(w, err, map[string]interface{}{"data": planParticipantUsers})
 	return
