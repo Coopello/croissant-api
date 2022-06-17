@@ -9,10 +9,8 @@ import (
 func response(w http.ResponseWriter, err error, body map[string]interface{}) error {
 	status := getStatusCode(err)
 	w.WriteHeader(status)
-	if status == http.StatusOK {
-		data, _ := json.Marshal(body)
-		w.Write(data)
-	}
+	data, _ := json.Marshal(body)
+	w.Write(data)
 	return err
 }
 
@@ -29,10 +27,10 @@ func getStatusCode(err error) int {
 		return http.StatusForbidden
 	case domain.ErrUnauthorized:
 		return http.StatusUnauthorized
-	case domain.ErrBadRequest:
-		return http.StatusBadRequest
 	case domain.StatusCreated:
 		return http.StatusCreated
+	case domain.ErrBadRequest, domain.ErrAlreadyExistsPlan:
+		return http.StatusBadRequest
 	case domain.ErrUnknownType:
 		return http.StatusUnsupportedMediaType
 	default:
