@@ -9,5 +9,5 @@ CREATE TABLE IF NOT EXISTS plans (
 	MeetTime        DATETIME NOT NULL,
 	PlanStatus      INT(40) DEFAULT 0,
 	OwnerUserId     BIGINT(20) UNSIGNED NOT NULL,
-	ParticipantUserCount INT(20) DEFAULT 1
+	ParticipantUsersCount INT(20) DEFAULT 1
 );
