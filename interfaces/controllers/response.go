@@ -29,10 +29,10 @@ func getStatusCode(err error) int {
 		return http.StatusForbidden
 	case domain.ErrUnauthorized:
 		return http.StatusUnauthorized
-	case domain.ErrBadRequest:
-		return http.StatusBadRequest
 	case domain.StatusCreated:
 		return http.StatusCreated
+	case domain.ErrBadRequest, domain.ErrAlreadyExistsPlan:
+		return http.StatusBadRequest
 	case domain.ErrUnknownType:
 		return http.StatusUnsupportedMediaType
 	default:

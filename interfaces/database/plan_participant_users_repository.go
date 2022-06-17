@@ -9,6 +9,28 @@ type PlanParticipantUsersRepository struct {
 }
 
 func (repo *PlanParticipantUsersRepository) Insert(planParticipantUsers domain.TPlanParticipantUsersInsert) (id int, err error) {
+	rows, err := repo.Query(
+		"SELECT EXISTS(SELECT * FROM plan_participant_users WHERE UserId = ? AND PlanId = ?)",
+		planParticipantUsers.UserId,
+		planParticipantUsers.PlanId,
+	)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer rows.Close()
+	var exist bool
+	for rows.Next() {
+		err := rows.Scan(&exist)
+		if err != nil {
+			panic(err.Error())
+		}
+	}
+	if exist {
+		err = domain.ErrAlreadyExistsPlan
+		return
+	}
+
 	exe, err := repo.Execute(
 		"INSERT INTO plan_participant_users (UserId, PlanId) VALUES (?, ?)",
 		planParticipantUsers.UserId, planParticipantUsers.PlanId,
