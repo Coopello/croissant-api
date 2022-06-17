@@ -8,6 +8,6 @@ CREATE TABLE IF NOT EXISTS plans (
 	MinPeopleNumber INT(11) DEFAULT 1,
 	MeetTime        DATETIME NOT NULL,
 	PlanStatus      INT(40) DEFAULT 0,
-	OwnerUserId     BIGINT(20) UNSIGNED NOT NULL
-	ParticipantUserId INT(20) DEFAULT 1,
+	OwnerUserId     BIGINT(20) UNSIGNED NOT NULL,
+	ParticipantUserCount INT(20) DEFAULT 1
 );
