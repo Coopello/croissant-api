@@ -21,7 +21,7 @@ func (repo *PlanRepository) All() (plans []domain.TPlan, err error) {
 		var p domain.TPlan
 
 		err := rows.Scan(
-			&p.ID, &p.ShopName, &p.MeetPlace, &p.MaxPeopleNumber, &p.MinPeopleNumber, &p.MeetTime, &p.PlanStatus, &p.OwnerUserId,
+			&p.ID, &p.ShopName, &p.MeetPlace, &p.MaxPeopleNumber, &p.MinPeopleNumber, &p.MeetTime, &p.PlanStatus, &p.OwnerUserId, &p.ParticipantUsersCount,
 		)
 		if err != nil {
 			panic(err.Error())
@@ -46,7 +46,7 @@ func (repo *PlanRepository) GetByUserId(userId int) (plans []domain.TPlan, err e
 		var p domain.TPlan
 
 		err := rows.Scan(
-			&p.ID, &p.ShopName, &p.MeetPlace, &p.MaxPeopleNumber, &p.MinPeopleNumber, &p.MeetTime, &p.PlanStatus, &p.OwnerUserId,
+			&p.ID, &p.ShopName, &p.MeetPlace, &p.MaxPeopleNumber, &p.MinPeopleNumber, &p.MeetTime, &p.PlanStatus, &p.OwnerUserId, &p.ParticipantUsersCount,
 		)
 		if err != nil {
 			panic(err.Error())
@@ -71,5 +71,15 @@ func (repo *PlanRepository) Insert(plan domain.TPlanInsert) (id int, err error) 
 		return id, err
 	}
 	id = int(rawId)
+
+	_, err = repo.Execute(
+		"INSERT INTO plan_participant_users (UserId, PlanId) VALUES(?, ?)",
+		plan.OwnerUserId,
+		id,
+	)
+	if err != nil {
+		return id, err
+	}
+
 	return
 }
