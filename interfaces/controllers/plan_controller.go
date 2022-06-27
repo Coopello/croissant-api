@@ -25,6 +25,10 @@ func NewPlanController(sqlHandler database.SqlHandler) *PlanController {
 
 func (controller *PlanController) PlanListView(w http.ResponseWriter, r *http.Request) {
 	plans, err := controller.interactor.ListPlan()
+	if err != nil {
+		response(w, err, map[string]interface{}{"error": err.Error()})
+		return
+	}
 	// 配列が空の場合にnullではなく、空の配列がレスポンスになるように
 	if len(plans) == 0 {
 		plans = make([]domain.TPlan, 0)
@@ -36,7 +40,7 @@ func (controller *PlanController) PlanListView(w http.ResponseWriter, r *http.Re
 func (controller *PlanController) PlanListByUserIdView(w http.ResponseWriter, r *http.Request) {
 	userId, err := strconv.Atoi(r.URL.Query().Get("userId"))
 	if err != nil {
-		response(w, err, nil)
+		response(w, err, map[string]interface{}{"error": err.Error()})
 		return
 	}
 	plans, err := controller.interactor.ListPlanByUserId(userId)
@@ -52,12 +56,12 @@ func (controller *PlanController) PlanInsertView(w http.ResponseWriter, r *http.
 	var plan domain.TPlanInsert
 	err := json.NewDecoder(r.Body).Decode(&plan)
 	if err != nil {
-		response(w, err, nil)
+		response(w, err, map[string]interface{}{"error": err.Error()})
 		return
 	}
 	id, err := controller.interactor.InsertPlan(plan)
 	if err != nil {
-		response(w, err, nil)
+		response(w, err, map[string]interface{}{"error": err.Error()})
 		return
 	}
 	response(w, nil, map[string]interface{}{"data": id})
