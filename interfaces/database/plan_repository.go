@@ -59,8 +59,8 @@ func (repo *PlanRepository) GetByUserId(userId int) (plans []domain.TPlan, err e
 
 func (repo *PlanRepository) Insert(plan domain.TPlanInsert) (id int, err error) {
 	exe, err := repo.Execute(
-		"INSERT INTO plans(ShopName, MeetPlace, MaxPeopleNumber, MinPeopleNumber, MeetTime, OwnerUserId) VALUES(?, ?, ?, ?, ?, ?)",
-		plan.ShopName, plan.MeetPlace, plan.MaxPeopleNumber, plan.MinPeopleNumber, plan.MeetTime, plan.OwnerUserId,
+		"INSERT INTO plans(ShopName, MeetPlace, MaxPeopleNumber, MinPeopleNumber, MeetTime,  PlanStatus, OwnerUserId) VALUES(?, ?, ?, ?, ?, ?, ?)",
+		plan.ShopName, plan.MeetPlace, plan.MaxPeopleNumber, plan.MinPeopleNumber, plan.MeetTime, plan.PlanStatus, plan.OwnerUserId,
 	)
 	if err != nil {
 		return id, err
