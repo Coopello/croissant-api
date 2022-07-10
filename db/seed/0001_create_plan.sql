@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS plans;
 
 CREATE TABLE IF NOT EXISTS plans (
   ID              BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	ShopId          INT(40) NOT NULL,
+	ShopName        VARCHAR(40) NOT NULL,
 	MeetPlace       VARCHAR(40) NOT NULL,
 	MaxPeopleNumber INT(11),
 	MinPeopleNumber INT(11) DEFAULT 1,
