@@ -2,6 +2,7 @@ package database
 
 import (
 	"CoopeLunch-api/domain"
+	"CoopeLunch-api/tools"
 )
 
 type PlanRepository struct {
@@ -80,6 +81,27 @@ func (repo *PlanRepository) Insert(plan domain.TPlanInsert) (id int, err error) 
 	if err != nil {
 		return id, err
 	}
+
+	return
+}
+
+func (repo *PlanRepository) MakePlanEnd(planId int) (isSuccess bool, err error) {
+	value, ok := tools.PLAN_STATUS["END"]
+	if !ok {
+		panic(err.Error())
+	}
+
+	exe, err := repo.Execute(
+		"UPDATE plans SET PlanStatus = ? WHERE ID = ?",
+		value,
+		planId,
+	)
+
+	if err != nil {
+		return false, err
+	}
+
+	isSuccess = exe != nil
 
 	return
 }
