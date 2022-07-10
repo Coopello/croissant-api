@@ -18,6 +18,7 @@ type PlanRepository interface {
 	All() ([]domain.TPlan, error)
 	GetByUserId(userId int) ([]domain.TPlan, error)
 	Insert(domain.TPlanInsert) (int, error)
+	MakePlanEnd(planId int) (bool, error)
 }
 
 func (interactor *PlanInteractor) ListPlan() (plans []domain.TPlan, err error) {
