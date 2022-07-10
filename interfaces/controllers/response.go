@@ -33,6 +33,10 @@ func getStatusCode(err error) int {
 		return http.StatusBadRequest
 	case domain.ErrUnknownType:
 		return http.StatusUnsupportedMediaType
+	case domain.ErrExistingEmail:
+		return http.StatusConflict
+	case domain.ErrIncorrectPassword:
+		return http.StatusBadRequest
 	default:
 		return http.StatusInternalServerError
 	}
